@@ -11,7 +11,7 @@ void setup() {
 void loop() {
   // No es necesario poner nada en el loop para este ejemplo
 }
-...
+```
 
 ### EJERCICIO N°2: LED INTERMITENTE 
  ```js
@@ -33,7 +33,7 @@ void loop() {   // Se repite infinitamente
   delay(1000); 
   
 }
-... 
+```
 
 ### EJERCICIO 3: Control por Pulsador
 ```js
@@ -49,7 +49,7 @@ void loop() {
   }
 
 }
-...
+```
 
 
 ### EJERCICIO 4: LED CON POTENCIADOR
@@ -62,6 +62,6 @@ void loop() {
   int brillo = map(valor, 0, 1023, 0, 255);  // Convertir a rango PWM
   analogWrite(9, brillo);               // Ajustar brillo
 }
-...
+```
 
 
