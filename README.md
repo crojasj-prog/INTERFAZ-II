@@ -111,7 +111,7 @@ void loop() {
   delay(2000); // 2 segundos
 }
 ```
-https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/semaforo.png
+<img src=" https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/semaforo.png"/> 
 
 
 
