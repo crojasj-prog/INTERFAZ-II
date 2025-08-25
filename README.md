@@ -34,7 +34,7 @@ void loop() {   // Se repite infinitamente
   
 }
 ```
-<img src="https://https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/led%20intermitente.png"/>
+<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/led%20intermitente.png"/>
 
 ### EJERCICIO 3: Control por Pulsador
 ```js
