@@ -64,7 +64,7 @@ void loop() {
 }
 ```
 
-### EJERCICIO 5: SEMAFORO 
+### EJERCICIO 5: SEMAFORO EN ARDUINO
 ``` js
  // C++ code - Semáforo Autos y Peatones
 
@@ -110,7 +110,9 @@ void loop() {
   digitalWrite(LED_5, HIGH);  // Rojo peatones encendido
   delay(2000); // 2 segundos
 }
+```
+https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/semaforo.png
 
-``` 
+
 
 
