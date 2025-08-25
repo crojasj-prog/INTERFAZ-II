@@ -63,6 +63,8 @@ void loop() {
   analogWrite(9, brillo);               // Ajustar brillo
 }
 ```
+<img src="width="1730" height="866" alt="image" src="https://github.com/user-attachments/assets/46fd35e7-b9b6-4c64-b279-0dbb6210bfd6" />
+
 
 ### EJERCICIO 5: SEMAFORO EN ARDUINO
 ``` js
