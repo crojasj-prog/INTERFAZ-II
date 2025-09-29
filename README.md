@@ -117,7 +117,8 @@ void loop() {
 
 ### EJERCICIO 7: Arduino + Boton + Processing 
   ´´´js 
-CODIGO ARDUINO
+
+  ´´´CODIGO ARDUINO
 
   int buttonPin = 2;  // Pin del botón
 int buttonState = 0;
@@ -135,8 +136,8 @@ void loop() {
     delay(200);               // Evitar rebotes
   }
 }
-
-CODIGO PROCESSING 
+´´´
+´´´CODIGO PROCESSING 
 
 import processing.serial.*;
 
