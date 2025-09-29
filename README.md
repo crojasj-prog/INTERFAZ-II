@@ -115,6 +115,72 @@ void loop() {
 ```
 <img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/semaforo.png"/> 
 
+### EJERCICIO 7: Arduino + Boton + Processing 
+  ´´´js 
+CODIGO ARDUINO
+
+  int buttonPin = 2;  // Pin del botón
+int buttonState = 0;
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP); // Botón con resistencia interna
+  Serial.begin(9600);
+}
+
+void loop() {
+  buttonState = digitalRead(buttonPin);
+
+  if (buttonState == HIGH) {   // Botón presionado
+    Serial.println(1);        // Enviar un "1" a Processing
+    delay(200);               // Evitar rebotes
+  }
+}
+
+CODIGO PROCESSING 
+
+import processing.serial.*;
+
+Serial myPort;
+ArrayList<PVector> circles; 
+
+void setup() {
+  size(1920, 1080);
+  background(0);
+  
+  // Ajusta el nombre del puerto según tu Arduino
+  println(Serial.list());
+  myPort = new Serial(this, "/dev/cu.usbmodem1101", 9600);
+  //myPort = new Serial(this, Serial.list()[0], 9600);
+  
+  circles = new ArrayList<PVector>();
+}
+
+void draw() {
+  //background(0);
+  
+  // Dibujar círculos almacenados
+  fill(0, 0, 0);
+  //noStroke();
+  stroke(255, 0, 0);
+  for (PVector c : circles) {
+    ellipse(c.x, c.y, 30, 30);
+  }
+  
+  // Revisar si llega algo de Arduino
+  if (myPort.available() > 0) {
+    String val = myPort.readStringUntil('\n');
+    if (val != null) {
+      val = trim(val);
+      if (val.equals("1")) {
+        // Cada vez que se aprieta el botón, agregar un círculo en posición aleatoria
+        circles.add(new PVector(random(width), random(height)));
+      }
+    }
+  }
+}
+
+  
+
 
 
 
