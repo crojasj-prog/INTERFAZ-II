@@ -185,7 +185,7 @@ void draw()
 ```Js
   
   CODIGO ARDUINO
-```
+```js
 
   int buttonPin = 2;  // Pin del botón
 int buttonState = 0;
@@ -206,7 +206,7 @@ void loop() {
 ```js
 CODIGO PROCESSING 
 
-```
+```js
 import processing.serial.*;
 
 Serial myPort;
