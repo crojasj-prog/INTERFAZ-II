@@ -558,7 +558,24 @@ void loop() {
 
   delay(10);
 }
-  
+```
+#### CIRCUITO PERSONAL: 3 LUCES LED + POTENCIADOR 
+ ``` Js
+ void setup() {
+  pinMode(7, OUTPUT); 
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);   // Pin PWM (símbolo ~)
+}
+
+void loop() {
+  int valor = analogRead(A0);           // Leer potenciómetro (0-1023)
+  int brillo = map(valor, 0, 1023, 0, 255);  // Convertir a rango PWM
+ analogWrite(7, brillo);    
+ analogWrite(9, brillo);   
+ analogWrite(10, brillo);          // Ajustar brillo
+}
+```
+
 
 
 
