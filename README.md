@@ -51,6 +51,7 @@ void loop() {
 
 }
 ```
+<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/led%20con%20pulsador.png"/>
 
 
 ### EJERCICIO 4: LED CON POTENCIADOR
