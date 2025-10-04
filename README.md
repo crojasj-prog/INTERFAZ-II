@@ -116,7 +116,7 @@ void loop() {
 <img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/semaforo.png"/> 
 
 #### EJERCICIO 7: Arduino + Boton + Processing 
-´´´Js
+```Js
   
   CODIGO ARDUINO
 
