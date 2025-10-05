@@ -580,9 +580,9 @@ void loop() {
 ```
 <img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/3%20led%20%2B%20potenciador.png">
 
-<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/registro%20circuito%201.png">
+<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/registro%20circuito%201.jpg">
 
-<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/registro%20circuito%202.png">
+<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/registro%20circuito%202.jpg">
 
 
 
