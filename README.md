@@ -560,6 +560,7 @@ void loop() {
   delay(10);
 }
 ```
+<img src="https://raw.githubusercontent.com/crojasj-prog/INTERFAZ-II/refs/heads/main/img/botonera.png">
 #### CIRCUITO PERSONAL: 3 LUCES LED + POTENCIADOR 
  ``` Js
  void setup() {
