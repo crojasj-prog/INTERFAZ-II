@@ -5,7 +5,12 @@
 3. [Control por pulsador](#ejercicio-3-control-por-pulsador) <br>
 4. [Led con potenciador](#ejercicio-4-led-con-potenciometro) <br>
 5. [Semaforo en arduino](#ejercicio-4-led-con-potenciometro) <br>
-6. [Arduino processing](
+6. [Arduino processing](#ejercicio-6-arduino-processing) <br>
+7. [Arduino+boton+prossecing](#ejercicio-7-arduino--boton--processing) <br>
+8. [Arduino+boton+potenciador+processing](#ejercicio-n8-arduino--bot%C3%B3n--potenciometro--processing) <br>
+9. [Botonera+audio](#ejercicio-n9-botonera--audio) <br>
+10. [Botonera](#ejercicio-n10-botonera) <br>
+11. [Sensor Sharp](
 
 #### EJERCICIO n°1: hola mundo!
 
