@@ -683,7 +683,7 @@ void loop() {
   delay(20);
 }
 
-``
+```
 #### codigo prossesing:
 ```js
 // --- Librerías necesarias ---
@@ -859,4 +859,3 @@ PImage[] loadImagesFromFolder(String folderName) {
 
 
 
-c
