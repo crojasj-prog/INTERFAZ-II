@@ -672,6 +672,7 @@ void loop()
 
 #### Ejercicio nota 2: 
 #### codigo arduino
+```js
 void setup() {
   Serial.begin(9600);
 }
@@ -684,6 +685,7 @@ void loop() {
 
 ``
 #### codigo prossesing:
+```js
 // --- Librerías necesarias ---
 // Importa la librería de comunicación serial para conectar con Arduino
 import processing.serial.*;
