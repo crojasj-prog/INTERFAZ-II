@@ -684,7 +684,7 @@ void loop() {
 }
 
 ```
-#### codigo prossesing:
+#### codigo processesing:
 ```js
 // --- Librerías necesarias ---
 // Importa la librería de comunicación serial para conectar con Arduino
