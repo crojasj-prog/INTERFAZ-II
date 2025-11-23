@@ -686,133 +686,114 @@ void loop() {
 ```
 #### codigo processesing:
 ```js
-// --- Librerías necesarias ---
-// Importa la librería de comunicación serial para conectar con Arduino
+// --- Librerías ---
 import processing.serial.*;
-// Importa la clase File de Java para listar archivos y carpetas
 import java.io.File;
 
-// --- Comunicación serial con Arduino ---
-// Variable que contendrá el objeto de puerto serial (conexión con Arduino)
+// --- Variables globales ---
 Serial myPort;
-// Variable que guarda el valor leído del potenciómetro (0..1023)
 float potValue = 0;
 
-// --- Variables de imágenes ---
-// Arreglo dinámico que contendrá todas las imágenes cargadas desde la carpeta
+// Suavizado del sensor
+float smoothedValue = 0;
+float smoothFactor = 0.02;
+
+// Imágenes
 PImage[] imgs;
-// Imagen donde se almacenará el resultado del promedio/interpolación
 PImage avgImg;
 
-// --- Configuración inicial ---
+// Rango dinámico del sensor con inicialización segura
+float minSensor = 0;
+float maxSensor = 1023;
+
+// --- Setup inicial ---
 void setup() {
-  // Define el tamaño de la ventana de Processing (ancho, alto)
   size(745, 1024);
-  
-  // Cargar imágenes desde carpeta "data/imagenes"
-  // Llama a la función que busca todas las imágenes dentro de esa carpeta
+
+  // Cargar imágenes
   imgs = loadImagesFromFolder("imagenes");
-  // Imprime en la consola cuántas imágenes se cargaron (útil para debug)
   println("Imágenes cargadas: " + imgs.length);
-  
-  // Redimensionar todas las imágenes al tamaño del lienzo para que coincidan pixel a pixel
+
+  // Redimensionar imágenes
   for (int i = 0; i < imgs.length; i++) {
-    imgs[i].resize(width, height); // redimensiona cada imagen al ancho y alto de la ventana
+    imgs[i].resize(width, height);
   }
-  
-  // Crea una imagen vacía del tamaño del lienzo donde guardaremos el promedio
+
+  // Imagen promedio
   avgImg = createImage(width, height, RGB);
-  
-  // Conectar con Arduino (ver lista de puertos)
-  // Muestra en consola la lista de puertos seriales disponibles (para identificar cuál usar)
-  printArray(Serial.list());
-  // Alternativa automática (comentada): abrir el primer puerto disponible a 9600 baudios
-  // myPort = new Serial(this, Serial.list()[0], 9600);
-  // Abrir un puerto específico (ejemplo para macOS). Ajusta según el puerto real en tu sistema.
-  myPort = new Serial(this, "/dev/cu.usbmodem1101", 9600);
-  // Nota: si no funciona el puerto, revisa la salida de printArray(Serial.list()) y usa el nombre correcto.
+
+  // Configurar puerto serial
+  printArray(Serial.list()); // Muestra los puertos disponibles
+  myPort = new Serial(this, Serial.list()[0], 9600); // usa el primer puerto
 }
 
-// --- Bucle principal ---
-// draw() se ejecuta continuamente (aprox. 60 veces por segundo)
+// --- Draw principal ---
 void draw() {
-  // Pinta el fondo de negro en cada frame
   background(0);
-  // Llama a la función que lee datos desde el puerto serial (actualiza potValue)
   readSerial();
-  
-  // Si no hay imágenes o sólo hay una, no hacemos nada (necesitamos al menos 2 para interpolar)
+
   if (imgs == null || imgs.length < 2) return;
-  
-  // Mapear el valor del potenciómetro (0..1023) al rango de índices entre 0 y imgs.length-1
-  // Esto permite moverse a lo largo de la secuencia de imágenes
-  float mixValue = map(potValue, 0, 1023, 0, imgs.length - 1);
-  
-  // Calcular el promedio/interpolación entre las dos imágenes vecinas según mixValue
+
+  // Suavizado del sensor
+  smoothedValue = lerp(smoothedValue, potValue, smoothFactor);
+
+  // Actualizar rango dinámico solo si el valor nuevo supera los límites actuales
+  if (smoothedValue < minSensor) minSensor = smoothedValue;
+  if (smoothedValue > maxSensor) maxSensor = smoothedValue;
+
+  // Evitar divisor cero
+  float range = maxSensor - minSensor;
+  if (range < 1) range = 1;
+
+  // Mapear valor suavizado al rango de imágenes
+  float mixValue = map(smoothedValue, minSensor, maxSensor, 0, imgs.length - 1);
+  mixValue = constrain(mixValue, 0, imgs.length - 1);
+
+  // Calcular imagen promedio
   avgImagesWeighted(mixValue);
-  
-  // Mostrar la imagen promedio resultante en la pantalla, en la posición (0,0)
+
+  // Mostrar imagen
   image(avgImg, 0, 0);
-  
-  // Mostrar texto con el valor actual del potenciómetro en la esquina inferior izquierda
-  fill(255); // color blanco para el texto
-  text("Valor pot: " + nf(potValue, 1, 0), 10, height - 10); // nf para formatear el número
+
+  // Mostrar info en pantalla
+  fill(255);
+  text("Valor sensor: " + nf(smoothedValue, 1, 1), 10, height - 30);
+  text("MIN: " + nf(minSensor,1,1) + " MAX: " + nf(maxSensor,1,1), 10, height - 10);
 }
 
-// --- Función que calcula el promedio ponderado entre imágenes ---
-// mix es un valor flotante que indica la posición entre imágenes (ej. 2.3 -> entre img2 e img3)
+// --- Función de promedio ponderado entre imágenes ---
 void avgImagesWeighted(float mix) {
-  // Accede al arreglo de píxeles de avgImg para poder modificarlos directamente
   avgImg.loadPixels();
-  
-  // Asegura que mix esté dentro del rango válido [0, imgs.length - 1]
+
   mix = constrain(mix, 0, imgs.length - 1);
-  
-  // i1 es el índice de la imagen "inferior" (por ejemplo 2 en 2.3)
+
   int i1 = floor(mix);
-  // i2 es la imagen siguiente (i1 + 1), pero sin pasarse del último índice
   int i2 = min(i1 + 1, imgs.length - 1);
-  // t es la fracción entre i1 e i2 (por ejemplo, 0.3 si mix es 2.3)
   float t = mix - i1;
-  
-  // Cargar los píxeles de las dos imágenes que vamos a mezclar
+
   imgs[i1].loadPixels();
   imgs[i2].loadPixels();
-  
-  // Recorre todos los píxeles de la imagen objetivo
+
   for (int i = 0; i < avgImg.pixels.length; i++) {
-    // Coge el color del píxel i de la imagen i1
     color c1 = imgs[i1].pixels[i];
-    // Coge el color del píxel i de la imagen i2
     color c2 = imgs[i2].pixels[i];
-    
-    // Interpola por separado cada componente de color (rojo, verde, azul)
-    // red(c1) obtiene la componente roja del color c1
+
     float r = lerp(red(c1), red(c2), t);
-    // green(c1) obtiene la componente verde del color c1
     float g = lerp(green(c1), green(c2), t);
-    // blue(c1) obtiene la componente azul del color c1
     float b = lerp(blue(c1), blue(c2), t);
-    
-    // Crea un nuevo color a partir de las componentes interpoladas y lo asigna al píxel i
+
     avgImg.pixels[i] = color(r, g, b);
   }
-  
-  // Aplica los cambios realizados en el arreglo de píxeles a la imagen avgImg
+
   avgImg.updatePixels();
 }
 
-// --- Leer valor del potenciómetro desde Arduino ---
-// Lee datos desde el puerto serial hasta encontrar saltos de línea y los convierte a número
+// --- Leer datos del sensor ---
 void readSerial() {
-  // Mientras el puerto exista y tenga bytes disponibles para leer...
   while (myPort != null && myPort.available() > 0) {
-    // Lee una línea completa hasta '\n' (salto de línea)
     String val = myPort.readStringUntil('\n');
     if (val != null) {
-      // Elimina espacios y caracteres de control al inicio/final
       val = trim(val);
-      // Si la cadena no está vacía, la convierte a float y la asigna a potValue
       if (val.length() > 0) {
         potValue = float(val);
       }
@@ -820,38 +801,26 @@ void readSerial() {
   }
 }
 
-// --- Cargar todas las imágenes desde una carpeta ---
-// Devuelve un arreglo PImage[] con todas las imágenes JPG/PNG encontradas en data/folderName
+// --- Cargar todas las imágenes desde la carpeta ---
 PImage[] loadImagesFromFolder(String folderName) {
-  // Construye la ruta absoluta a la carpeta dentro de la carpeta data del sketch
   String path = sketchPath("data/" + folderName);
-  // Crea un objeto File apuntando a esa carpeta
   File folder = new File(path);
-  // Lista todos los archivos dentro de la carpeta (puede devolver null si no existe)
   File[] files = folder.listFiles();
-  
-  // Si files es null, la carpeta no existe o no tiene permisos -> avisar y devolver null
+
   if (files == null) {
     println("Carpeta no encontrada: " + path);
     return null;
   }
-  
-  // Crea una lista dinámica para almacenar las PImage cargadas
+
   ArrayList<PImage> loaded = new ArrayList<PImage>();
-  // Recorre cada archivo encontrado en la carpeta
   for (File f : files) {
-    // Obtiene el nombre del archivo y lo convierte a minúsculas para comparar extensiones
     String fname = f.getName().toLowerCase();
-    // Si termina en .jpg o .png, lo cargamos
     if (fname.endsWith(".jpg") || fname.endsWith(".png")) {
-      // loadImage busca en data/folderName el archivo y devuelve un PImage
       PImage img = loadImage(folderName + "/" + f.getName());
-      // Si la imagen se cargó correctamente, la agregamos a la lista
       if (img != null) loaded.add(img);
     }
   }
-  
-  // Convierte la ArrayList a un arreglo PImage[] y lo retorna
+
   return loaded.toArray(new PImage[loaded.size()]);
 }
 ```
